@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="plugins/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+    <style>
+        .axis path,
+        .axis line{
+            fill:none;
+            stroke:black;
+            shape-rendering:crispEdges;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12 padding-top-20">
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="code" class="col-sm-4 control-label">股票代码</label>
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" id="code" placeholder="沪市:0+代码  深市:1+代码">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cycle" class="col-sm-4 control-label">计算类型</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="cycle">
+                        <option value="yearly">年</option>
+                        <option value="weekly">周</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="weightingNum" class="col-sm-4 control-label">加权数</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="weightingNum" placeholder="10">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="startYear" class="col-sm-4 control-label">开始日期</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="startYear" placeholder="2019">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endYear" class="col-sm-4 control-label">结束日期</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="endYear" placeholder="2019">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <button type="button" class="btn btn-primary btn-sm" id="submitAndCalculate">提交</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title" id="stockName"> - </h3>
+            </div>
+            <div class="panel-body">
+                <div class="info-container" >
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>使用参数</th>
+                            <th>参数时间范围</th>
+                            <th>模拟收益</th>
+                            <th>实际涨跌</th>
+                            <th>跑赢实际涨跌点数</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dataDisplayBody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div id="lineChart">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-copyright text-center">
+    Copyright &copy; 2019 <strong>唐</strong>
+</div>
+
+<script src="plugins/jquery-2.2.4.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="script/base.js"></script>
+<script src="script/dashboard.js"></script>
+<script src="script/my-utils.js"></script>
+
+<script>
+    $(function () {
+
+        //地址提交点击事件
+        $("#submitAndCalculate").click(function () {
+            var paramInfo = new Object();
+            paramInfo.code = $("#code").val();
+            paramInfo.cycle = $("#cycle").val();
+            paramInfo.weightingNum = $("#weightingNum").val();
+            paramInfo.startYear = $("#startYear").val();
+            paramInfo.endYear = $("#endYear").val();
+            submitAndCalculate(paramInfo);
+        });
+    });
+</script>
+</body>
+</html>

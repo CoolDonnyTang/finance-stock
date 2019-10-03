@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>数据同步</title>
+
+    <!-- Bootstrap -->
+    <link href="plugins/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/data-sync.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="data-sync-display col-sm-12">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="code" class="col-sm-3 control-label">股票代码</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="code" placeholder="沪市:0+代码  深市:1+代码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="startDate" class="col-sm-3 control-label">开始日期</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="startDate" placeholder="2017-2-3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endDate" class="col-sm-3 control-label">结束日期</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="endDate" placeholder="2019-2-3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="button" class="btn btn-primary btn-sm" id="submitSync">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="page-copyright text-center">
+    Copyright &copy; 2019 <strong>测试</strong>
+</div>
+
+<script src="plugins/jquery-2.2.4.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="script/base.js"></script>
+<script src="script/my-utils.js"></script>
+<script src="script/data-sync.js"></script>
+<script>
+    $(function () {
+        //点击login
+        $("#submitSync").click(function () {
+            dataSync();
+        });
+
+
+    });
+</script>
+</body>
+</html>

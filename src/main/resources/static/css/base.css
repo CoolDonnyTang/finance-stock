@@ -1,0 +1,81 @@
+
+.container {
+	width:1140px !important;
+	min-width:1080px !important;
+}
+div {
+	 /*border:1px solid red;*/
+}
+.login-logo {
+	 padding:10px 0 10px 80px;
+}
+.login-logo-image {
+	display: inline-block;
+	width: 108px;
+	height:48px;
+}
+.footer-list li:HOVER {
+	color:#ff4400;
+	cursor: pointer;
+}
+.footer-list {
+	font-size:12px;
+	overflow:auto;
+	list-style: none;
+	padding:0;
+	display: inline-block;
+	margin:0 auto;
+}
+.footer-list li {
+	float:left;
+	margin:0 10px;
+}
+.page-copyright {
+	padding-bottom: 8px;
+	padding-top: 8px;
+	position: fixed;
+	bottom: 0px;
+	font-size:12px;
+	width: 100%;
+	background-color: #dfdfdf;
+}
+.icon {
+	width: 1em; height: 1em;
+	vertical-align: -0.15em;
+	fill: currentColor;
+	overflow: hidden;
+}
+.my-btn-1 {
+	color:#666;
+}
+.my-btn-1:HOVER {
+	color:#d81e06;
+}
+.my-link-1 {
+	text-decoration: none;
+	color:#666;
+}
+.my-link-1:HOVER {
+	color:red;
+	text-decoration: none;
+	cursor: pointer;
+}
+.color666 {
+	color:#666;
+}
+.link-hover:HOVER {
+	cursor: pointer;
+}
+.padding-top-20 {
+	padding-top: 20px;
+}
+
+
+
+
+
+
+
+
+
+

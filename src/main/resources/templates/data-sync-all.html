@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+
+    <title>1</title>
+
+    <!-- Bootstrap -->
+    <link href="plugins/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/data-sync.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-primary btn-sm" id="syncAll">同步所有数据至最新</button>
+    </div>
+    <div class="col-sm-12">
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>使用参数</th>
+                <th>参数时间范围</th>
+                <th>模拟收益</th>
+                <th>实际涨跌</th>
+                <th>跑赢实际涨跌点数</th>
+            </tr>
+            </thead>
+            <tbody id="logDisplay">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="page-copyright text-center">
+    Copyright &copy; 2019 <strong>测试</strong>
+</div>
+
+<script src="plugins/jquery-2.2.4.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="script/base.js"></script>
+<script src="script/my-utils.js"></script>
+<script src="script/data-sync-all.js"></script>
+<script>
+    $(function () {
+        $("#syncAll").click(function () {
+            alert("ok");
+            syncAllData();
+        });
+
+
+    });
+</script>
+</body>
+</html>
