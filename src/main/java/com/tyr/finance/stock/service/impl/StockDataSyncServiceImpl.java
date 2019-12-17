@@ -60,7 +60,7 @@ public class StockDataSyncServiceImpl implements StockDataSyncService {
         return false;
     }
 
-    public StockDailyDealSyncLog createOrUpdateData(String code, Date startDate, Date endDate) {
+    public StockDailyDealSyncLog createOrUpdateData(String code, Date startDate, Date endDate, Date latestDealDay) {
         try {
             //格式化时间
             startDate = DateUtil.fomatToyyyy_MM_dd(startDate);
@@ -72,7 +72,6 @@ public class StockDataSyncServiceImpl implements StockDataSyncService {
             log.setStockCode(code);
 
             Date latestDate = stockDailyDealService.getLatestDate(code);
-            Date latestDealDay = RemoteDataUtil.getLatestDealDay();
             log.setCurrentLatestDate(latestDate);
             log.setSyncStartDate(startDate);
             log.setSyncEndDate(endDate);

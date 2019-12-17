@@ -30,7 +30,8 @@ public class StockDataSyncController {
     @RequestMapping(value = "/stock/{code}", method = RequestMethod.POST)
     public ResultVo<?> createOrUpdateData(@PathVariable("code") String code, Date startDate, Date endDate) throws Exception {
         ResultVo<?> result = new ResultVo<>();
-        stockDataSyncService.createOrUpdateData(code, startDate, endDate);
+        Date latestDealDay = RemoteDataUtil.getLatestDealDay();
+        stockDataSyncService.createOrUpdateData(code, startDate, endDate, latestDealDay);
         return result;
     }
 
@@ -46,34 +47,46 @@ public class StockDataSyncController {
         Date startDate = DateUtil.fomatToyyyy_MM_dd(c.getTime());
         Date endDate = DateUtil.fomatToyyyy_MM_dd(new Date());
 
-        String prefix = "";
-        int maxCode = 0;
-        int start = 0;
+        //最新交易日
+        Date latestDealDay = RemoteDataUtil.getLatestDealDay();
 
         //上海
-        prefix = "sh";
-        maxCode = 699999;
-        start = 600001;
-        syncAll(prefix, maxCode, start, startDate, endDate);
+        final String prefix1 = "sh";
+        final int maxCode1 = 699999;
+        final int start1 = 600001;
+        Thread t1 = new Thread(()->{
+            syncAll(prefix1, maxCode1, start1, startDate, endDate, latestDealDay);
+        });
+        t1.start();
 
         //深圳主板
-        prefix = "sz";
-        maxCode = 100000;
-        start = 1;
-        syncAll(prefix, maxCode, start, startDate, endDate);
+        final String prefix2 = "sz";
+        final int maxCode2 = 100000;
+        final int start2 = 1;
+        Thread t2 = new Thread(()->{
+            syncAll(prefix2, maxCode2, start2, startDate, endDate, latestDealDay);
+        });
+        t2.start();
 
         //深圳创业板
-        prefix = "sz";
-        maxCode = 399999;
-        start = 300001;
-        syncAll(prefix, maxCode, start, startDate, endDate);
+        final String prefix3 = "sz";
+        final int maxCode3 = 399999;
+        final int start3 = 300001;
+        Thread t3 = new Thread(()->{
+            syncAll(prefix3, maxCode3, start3, startDate, endDate, latestDealDay);
+        });
+        t3.start();
+
+        t1.join();
+        t2.join();
+        t3.join();
 
         result.setStatus(200);
         result.setMessage("同步成功");
         return result;
     }
 
-    private void syncAll(String prefix, int maxCode, int start, Date startDate, Date endDate) {
+    private void syncAll(String prefix, int maxCode, int start, Date startDate, Date endDate, Date latestDealDay) {
         int errorTime = 0;
         int maxErrorTime = 3000;
         for(int i=start; i<maxCode; i++) {
@@ -82,7 +95,7 @@ public class StockDataSyncController {
                 break;
             }
             String code = prefix + String.format("%06d", i);
-            StockDailyDealSyncLog log = stockDataSyncService.createOrUpdateData(code, startDate, endDate);
+            StockDailyDealSyncLog log = stockDataSyncService.createOrUpdateData(code, startDate, endDate,latestDealDay);
             if(log==null || stockDataSyncService.FAILED.equalsIgnoreCase(log.getSynceStatus())) {
                 errorTime++;
             } else {
