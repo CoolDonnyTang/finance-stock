@@ -12,8 +12,11 @@ import java.util.List;
 public interface StockDataSyncService {
     String SUCCESS = "Success";
     String FAILED = "Failed";
+    String ERROR = "Error";
 
     boolean saveData(StockHeader stockHeader, List<StockDailyDeal> stockDailyDeals) throws Exception;
 
     StockDailyDealSyncLog createOrUpdateData(String code, Date startDate, Date endDate, Date latestDealDay);
+
+    void createOrUpdateDataAsync(String code, Date startDate, Date endDate, Date latestDealDay);
 }

@@ -15,6 +15,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
@@ -70,6 +72,7 @@ public class StockDataSyncServiceImpl implements StockDataSyncService {
 
             StockDailyDealSyncLog log = new StockDailyDealSyncLog();
             log.setStockCode(code);
+            log.setEntryDatetime(new Timestamp(System.currentTimeMillis()));
 
             Date latestDate = stockDailyDealService.getLatestDate(code);
             log.setCurrentLatestDate(latestDate);
@@ -83,7 +86,16 @@ public class StockDataSyncServiceImpl implements StockDataSyncService {
             }
             startDate = latestDate != null ? DateUtil.add(latestDate, Calendar.DAY_OF_MONTH, 1) : startDate;
             log.setSyncStartDate(startDate);
-            List<StockDailyDeal> stockDailyDeals = RemoteDataUtil.getDailyData(code, startDate, endDate);
+            List<StockDailyDeal> stockDailyDeals = null;
+            try {
+                stockDailyDeals = RemoteDataUtil.getDailyData(code, startDate, endDate);
+            } catch (Exception e) {
+                log.setSynceStatus(ERROR);
+                log.setSyncDesc("调用远程API错误");
+                stockDailyDealSyncLogRepository.save(log);
+                logger.error(e.getMessage(), e);
+                return log;
+            }
             if (CollectionUtils.isEmpty(stockDailyDeals)) {
                 log.setSynceStatus(FAILED);
                 log.setSyncDesc("未从远程拉取到相应的数据");
@@ -93,14 +105,28 @@ public class StockDataSyncServiceImpl implements StockDataSyncService {
             StockHeader header = new StockHeader();
             header.setCode(code);
             header.setName(stockDailyDeals.get(0).getCurrentStockName());
-            saveData(header, stockDailyDeals);
-            stockDailyDealSyncLogRepository.save(log);
-            log.setSyncDesc("数据同步成功");
-            return log;
+            try {
+                saveData(header, stockDailyDeals);
+                log.setSyncDesc("数据同步成功");
+                stockDailyDealSyncLogRepository.save(log);
+                return log;
+            } catch (Exception e) {
+                log.setSynceStatus(ERROR);
+                log.setSyncDesc("保存数据出错：" + e.getMessage());
+                stockDailyDealSyncLogRepository.save(log);
+                logger.error(e.getMessage(), e);
+                return log;
+            }
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
         }
+    }
+
+    @Async("CommonPool")
+    public void createOrUpdateDataAsync(String code, Date startDate, Date endDate, Date latestDealDay) {
+        createOrUpdateData(code, startDate, endDate, latestDealDay);
     }
 
 }
